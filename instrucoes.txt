@@ -1,0 +1,4 @@
+1 - Faça a instalação da seguinte biblioteca: pip install python-telegram-bot --pre --upgrade
+2 - Crie um novo bot no BotFather
+3 - link do bot que eu criei no telegram: t.me/chat_devdavid_bot.
+4
