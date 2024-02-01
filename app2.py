@@ -17,11 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # States(onde vem, o que fazer e para onde ir depois)
-<<<<<<< HEAD
 ESCOLHER_OPCAO, LOGIN, REGISTRAR_EMAIL, REGISTRAR_SENHA, REGISTRAR_CPF = range(5)
-=======
-ESCOLHER_OPCAO, LOGIN, REGISTRAR_EMAIL, REGISTRAR_SENHA = range(4)
->>>>>>> 16855079ab375fe344f4e715f457ae5845414575
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     reply_keyboard = [["Logar","Registrar"]]
@@ -47,7 +43,6 @@ async def registrar_senha(update:Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     return REGISTRAR_SENHA
 
-<<<<<<< HEAD
 async def registrar_cpf(update:Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print(context.user_data)
     context.user_data['senha'] = update.message.text
@@ -56,17 +51,11 @@ async def registrar_cpf(update:Update, context: ContextTypes.DEFAULT_TYPE) -> in
     return REGISTRAR_CPF
     
 
-=======
->>>>>>> 16855079ab375fe344f4e715f457ae5845414575
 
 
 async def finalizar(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     if context.user_data.get('email'):
-<<<<<<< HEAD
         await update.message.reply_text(f'Cadastro Concluído! E-mail {context.user_data["email"]}, Senha: {context.user_data["senha"]}, CPF: {update.message.text}')
-=======
-        await update.message.reply_text(f'Cadastro Concluído! E-mail {context.user_data["email"]}, Senha: {update.message.text}')
->>>>>>> 16855079ab375fe344f4e715f457ae5845414575
     else:
         await update.message.reply_text(f'Logado como {update.message.text}')
 
@@ -96,7 +85,6 @@ def main() -> None:
             REGISTRAR_EMAIL: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, registrar_senha)
         
-<<<<<<< HEAD
             ],
             REGISTRAR_SENHA:[
                 MessageHandler(filters.TEXT & ~filters.COMMAND, registrar_cpf)
@@ -104,13 +92,6 @@ def main() -> None:
             ],
             REGISTRAR_CPF:[
                 MessageHandler(filters.TEXT & ~filters.COMMAND, finalizar)
-=======
-        
-            ],
-            REGISTRAR_SENHA:[
-                MessageHandler(filters.TEXT & ~filters.COMMAND, finalizar)
-        
->>>>>>> 16855079ab375fe344f4e715f457ae5845414575
             ]
         
         },
