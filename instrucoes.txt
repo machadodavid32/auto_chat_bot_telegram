@@ -2,3 +2,4 @@
 2 - Crie um novo bot no BotFather
 3 - link do bot que eu criei no telegram: t.me/chat_devdavid_bot.
 4
+'6932406558:AAH7XN7IhCWH0NT6LqPZ8kMUET4EBK6IOx8'

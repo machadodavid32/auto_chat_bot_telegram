@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 # States(onde vem, o que fazer e para onde ir depois)
 ESCOLHER_OPCAO, LOGIN, REGISTRAR_EMAIL, REGISTRAR_SENHA, REGISTRAR_CPF = range(5)
 
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     reply_keyboard = [["Logar","Registrar"]]
 
@@ -32,7 +31,7 @@ async def login(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return LOGIN
 
 async def registrar_email(update:Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    await update.message.reply_text("Digite seu e-mail",reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text("Digite seu e-mail",reply_markup=ReplyKeyboardMarkup([["🚫Cancelar Cadastro"]],one_time_keyboard=False))
 
     return REGISTRAR_EMAIL
 
@@ -40,24 +39,25 @@ async def registrar_senha(update:Update, context: ContextTypes.DEFAULT_TYPE) -> 
     print(context.user_data)
     context.user_data['email'] = update.message.text
 
-    await update.message.reply_text("Digite sua senha:")
+    await update.message.reply_text("Digite sua senha:",reply_markup=ReplyKeyboardMarkup([["🚫Cancelar Cadastro"]],one_time_keyboard=False))
 
     return REGISTRAR_SENHA
 
-
-async def registrar_cpf(update:Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def registrar_cpf(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print(context.user_data)
-    context.user_data['senha'] = update.message.text
-    await update.message.reply_text("Digite seu cpf:")
+    context.user_data["senha"] = update.message.text
+    await update.message.reply_text("Digite seu CPF:",reply_markup=ReplyKeyboardMarkup([["🚫Cancelar Cadastro"]],one_time_keyboard=False))
 
     return REGISTRAR_CPF
-    
 
-
+async def encerrar_cadastro(update: Update,context: ContextTypes.DEFAULT_TYPE) -> int:
+    context.user_data.clear()
+    await update.message.reply_text("Processo de cadastro/login foi cancelado.",reply_markup=ReplyKeyboardRemove())
+    return ConversationHandler.END
 
 async def finalizar(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     if context.user_data.get('email'):
-        await update.message.reply_text(f'Cadastro Concluído! E-mail {context.user_data["email"]}, Senha: {context.user_data["senha"]}, CPF: {update.message.text}')
+        await update.message.reply_text(f'Cadastro Concluído! E-mail {context.user_data["email"]}, Senha: {context.user_data["email"]}, CPF: {update.message.text}')
     else:
         await update.message.reply_text(f'Logado como {update.message.text}')
 
@@ -85,17 +85,20 @@ def main() -> None:
                 MessageHandler(filters.TEXT & ~filters.COMMAND, finalizar),
             ],
             REGISTRAR_EMAIL: [
+                MessageHandler(filters.Regex("^(🚫Cancelar Cadastro)$"),encerrar_cadastro),
                 MessageHandler(filters.TEXT & ~filters.COMMAND, registrar_senha)
         
-
             ],
             REGISTRAR_SENHA:[
+                MessageHandler(filters.Regex("^(🚫Cancelar Cadastro)$"),encerrar_cadastro),
                 MessageHandler(filters.TEXT & ~filters.COMMAND, registrar_cpf)
         
             ],
             REGISTRAR_CPF:[
+                MessageHandler(filters.Regex("^(🚫Cancelar Cadastro)$"),encerrar_cadastro),
                 MessageHandler(filters.TEXT & ~filters.COMMAND, finalizar)
-         ]
+        
+            ]
         
         },
         fallbacks=[
